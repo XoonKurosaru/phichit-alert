@@ -538,16 +538,18 @@ textarea{min-height:100px;resize:vertical}
 
 <div class="section-title">3. แนวโน้มและรถผ่านได้ไหม</div>
 
+<!-- กลุ่ม 3 ปุ่มแรก (เรียงแนวนอน 3 คอลัมน์) -->
 <div class="trend-grid">
-  <button class="choice" onclick="chooseTrend(this,'น้ำกำลังขึ้น')">↑ น้ำกำลังขึ้น</button>
-  <button class="choice" onclick="chooseTrend(this,'ทรงตัว')">→ ทรงตัว</button>
-  <button class="choice" onclick="chooseTrend(this,'กำลังลดลง')">↓ กำลังลดลง</button>
+  <button class="choice" onclick="chooseTrend(this,'น้ำกำลังขึ้น')">↑<br>น้ำกำลังขึ้น</button>
+  <button class="choice" onclick="chooseTrend(this,'ทรงตัว')">→<br>ทรงตัว</button>
+  <button class="choice" onclick="chooseTrend(this,'กำลังลด')">↓<br>กำลังลด</button>
 </div>
 
-<div class="pass-grid" style="margin-top: 10px;">
-  <button class="choice" onclick="chooseTrend(this,'รถเก๋ง / กระบะผ่านได้')">🚗 รถเก๋ง / กระบะผ่านได้</button>
-  <button class="choice" onclick="chooseTrend(this,'เฉพาะรถสูง')">🛻 เฉพาะรถสูง</button>
-  <button class="choice" onclick="chooseTrend(this,'เรือเท่านั้น')">🚤 เรือเท่านั้น</button>
+<!-- กลุ่มปุ่มประเภทรถ (เรียงลงมาแนวตั้ง) -->
+<div class="pass-grid" style="margin-top: 8px;">
+  <button class="choice pass-choice" onclick="chooseTrend(this,'รถเก๋ง / กระบะผ่านได้')">รถเก๋ง/กระบะผ่านได้</button>
+  <button class="choice pass-choice" onclick="chooseTrend(this,'เฉพาะรถสูง')">เฉพาะรถสูง</button>
+  <button class="choice pass-choice" onclick="chooseTrend(this,'เรือเท่านั้น')">เรือเท่านั้น</button>
 </div>
 
       <label class="field" style="margin-top:14px">หมายเหตุ</label>

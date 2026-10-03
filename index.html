@@ -1,341 +1,590 @@
+from pathlib import Path
 
-<!DOCTYPE html>
+html = r'''<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0d2b45">
 <title>ศูนย์ช่วยเหลือน้ำท่วม จังหวัดพิจิตร</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
-:root {
+:root{
+  --navy:#0d2b45;
+  --navy2:#123b60;
   --blue:#1557a6;
-  --dark:#14283a;
-  --bg:#f2f5f8;
-  --border:#d6e0eb;
-  --red:#c92f39;
+  --blue2:#1c6ac4;
+  --sky:#eaf3ff;
+  --bg:#f3f6fa;
+  --card:#fff;
+  --text:#14283a;
+  --muted:#6b7b8d;
+  --border:#d9e2ec;
+  --green:#1ea56a;
+  --yellow:#e3ad24;
+  --orange:#ee7d35;
+  --red:#d83d43;
+  --shadow:0 8px 24px rgba(18,59,96,.08);
 }
-* { box-sizing:border-box; }
-body {
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
   margin:0;
   font-family:"IBM Plex Sans Thai",sans-serif;
   background:var(--bg);
-  color:var(--dark);
+  color:var(--text);
 }
-button,input,select,textarea { font:inherit; }
-button { cursor:pointer; }
-header {
-  background:white;
-  border-bottom:1px solid var(--border);
-  padding:14px 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+.topbar{
+  background:var(--navy);
+  color:white;
   position:sticky;
   top:0;
   z-index:1000;
 }
-.brand { font-size:19px;font-weight:700;color:var(--blue); }
-.brand small { display:block;font-size:12px;color:#65778a;font-weight:400; }
-nav { display:flex;gap:8px; }
-button {
-  border:0;
-  border-radius:10px;
-  padding:11px 16px;
-  font-weight:600;
-}
-.primary { background:var(--blue);color:white; }
-.secondary { background:#eaf3ff;color:var(--blue); }
-.outline { background:white;border:1px solid var(--border);color:var(--dark); }
-.danger { background:var(--red);color:white; }
-main { max-width:1100px;margin:auto;padding:24px 16px; }
-h1 { font-size:clamp(25px,4vw,36px);margin:8px 0; }
-h2 { font-size:21px;margin:0 0 8px; }
-p { line-height:1.7; }
-.muted { color:#65778a;font-size:13px; }
-.card {
-  background:white;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-  margin-bottom:18px;
-  box-shadow:0 5px 20px #18365008;
-}
-.alert {
-  padding:13px;
-  border:1px solid #f0d28b;
-  background:#fff8e7;
-  color:#805600;
-  border-radius:12px;
-  margin-bottom:18px;
-}
-.actions { display:grid;grid-template-columns:1fr 1fr;gap:10px; }
-.big { width:100%;padding:15px;font-size:16px; }
-select,input,textarea {
-  width:100%;
-  padding:12px;
-  border:1px solid #cbd8e4;
-  border-radius:10px;
-  background:white;
-  margin:5px 0 12px;
-}
-textarea { min-height:100px; }
-.status {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:16px;
-}
-.status div {
-  padding:12px 8px;
-  border:1px solid var(--border);
-  border-radius:11px;
-  text-align:center;
-  background:#fff;
-  font-size:13px;
-}
-.dot {
-  display:inline-block;
-  width:11px;height:11px;border-radius:50%;
-  margin-right:5px;
-}
-.green { background:#20a565; }
-.yellow { background:#e8b22e; }
-.orange { background:#ee813c; }
-.red { background:#dc4141; }
-#map,#levelmap {
-  height:350px;
-  border-radius:12px;
-  z-index:1;
-}
-.grid { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
-.page { display:none; }
-.page.active { display:block; }
-.field label { font-weight:600;font-size:14px; }
-.row { display:flex;gap:10px;align-items:center; }
-.row > * { flex:1; }
-footer {
-  padding:20px;
-  text-align:center;
-  font-size:12px;
-  color:#65778a;
-}
-.modal {
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:2000;
-  background:#10283dcc;
-  padding:16px;
-  overflow:auto;
-  align-items:center;
-  justify-content:center;
-}
-.modal.open { display:flex; }
-.modal-content {
-  background:white;
-  border-radius:16px;
-  padding:20px;
-  width:min(550px,100%);
-  max-height:95vh;
-  overflow:auto;
-}
-.modal-head {
+.topbar-inner{
+  max-width:1180px;
+  margin:auto;
+  padding:12px 18px;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:14px;
 }
-#records > div {
-  border:1px solid var(--border);
-  padding:12px;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+.brand-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;
+  background:#174a75;
+  flex:none;
+}
+.brand-icon svg{width:25px;height:25px}
+.brand-title{font-weight:700;font-size:17px;line-height:1.2}
+.brand-sub{font-size:11px;color:#b9c9d8;margin-top:2px}
+.nav-actions{display:flex;gap:7px;align-items:center}
+.nav-btn{
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.08);
+  color:#fff;
   border-radius:10px;
-  margin-top:8px;
+  padding:9px 12px;
+  font-weight:600;
 }
-@media(max-width:650px) {
-  header { padding:12px; }
-  .brand { font-size:15px; }
-  nav { gap:4px; }
-  nav button { padding:8px;font-size:12px; }
-  main { padding:17px 12px; }
-  .card { padding:15px; }
-  .status { grid-template-columns:1fr 1fr; }
-  .grid { grid-template-columns:1fr; }
-  .actions { grid-template-columns:1fr; }
-  #map,#levelmap { height:300px; }
+.nav-btn.active,.nav-btn:hover{background:#1b5e9d}
+.nav-danger{
+  background:#fff0f0;
+  color:#bd2f39;
+  border:0;
+}
+
+main{max-width:1180px;margin:auto;padding:20px 16px 42px}
+.page{display:none}
+.page.active{display:block}
+
+.hero{
+  background:linear-gradient(135deg,#1557a6,#1b6bbd);
+  color:white;
+  border-radius:20px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  margin-bottom:14px;
+}
+.hero-row{
+  display:flex;align-items:center;justify-content:space-between;gap:16px
+}
+.hero-icon{
+  width:52px;height:52px;border-radius:15px;
+  background:rgba(255,255,255,.14);
+  display:grid;place-items:center;flex:none;
+}
+.hero h1{font-size:27px;margin:0 0 4px}
+.hero p{margin:0;color:#dcecff;font-size:13px}
+.hero-copy{flex:1}
+.hero-report{
+  border:0;background:#fff;color:var(--blue);
+  border-radius:12px;padding:12px 16px;font-weight:700;
+  white-space:nowrap;
+}
+.hero-report:hover{transform:translateY(-1px)}
+
+.section-title{
+  font-size:17px;font-weight:700;margin:20px 2px 8px;
+}
+.section-sub{font-size:12px;color:var(--muted);margin:0 2px 10px}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  margin-bottom:14px;
+}
+.card-body{padding:16px}
+
+.location-card{padding:14px}
+.location-head{
+  display:flex;justify-content:space-between;gap:10px;align-items:center;
+  font-weight:700;font-size:14px;
+}
+.location-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.location-btn{
+  border:1px solid var(--border);background:#fff;border-radius:10px;
+  padding:10px;font-weight:600;color:var(--text)
+}
+.location-btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.location-note{font-size:10px;color:#8a98a7;margin:7px 2px 0}
+
+.status-summary{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--border);border-radius:14px;overflow:hidden;
+}
+.status-item{
+  padding:13px 8px;text-align:center;background:#fff;
+  border-right:1px solid var(--border);
+}
+.status-item:last-child{border-right:0}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+.green{background:var(--green)} .yellow{background:var(--yellow)}
+.orange{background:var(--orange)} .red{background:var(--red)}
+.status-name{font-size:13px;font-weight:700}
+.status-sub{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+
+.quick-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+}
+.quick-link{
+  background:#fff;border:1px solid var(--border);border-radius:14px;
+  min-height:88px;padding:12px 8px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:7px;
+  transition:.15s;
+}
+.quick-link:hover{border-color:#9bbce0;transform:translateY(-1px)}
+.quick-icon{
+  width:34px;height:34px;border-radius:10px;
+  background:#edf5ff;color:var(--blue);
+  display:grid;place-items:center;
+}
+.quick-icon svg{width:19px;height:19px}
+.quick-label{font-size:12px;font-weight:700}
+.quick-note{font-size:9px;color:var(--muted)}
+
+.info-list{
+  background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;
+}
+.info-link{
+  display:flex;align-items:center;gap:11px;padding:12px;
+  border-bottom:1px solid var(--border);
+}
+.info-link:last-child{border-bottom:0}
+.info-link:hover{background:#f8fbff}
+.info-icon{
+  width:34px;height:34px;border-radius:10px;background:#edf5ff;
+  color:var(--blue);display:grid;place-items:center;flex:none
+}
+.info-icon svg{width:18px;height:18px}
+.info-main{flex:1;min-width:0}
+.info-title{font-weight:700;font-size:13px}
+.info-desc{font-size:10px;color:var(--muted);margin-top:1px}
+.chevron{color:#8ca0b3}
+
+.source-note{
+  font-size:10px;color:#8a98a7;margin:7px 2px 0;
+}
+
+.emergency{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+}
+.emergency a{
+  background:#fff;border:1px solid var(--border);border-radius:14px;
+  padding:12px;display:flex;align-items:center;justify-content:space-between;
+}
+.emergency-name{font-size:11px;font-weight:600}
+.emergency-number{font-size:17px;font-weight:700;color:var(--red)}
+
+footer{
+  text-align:center;color:var(--muted);font-size:11px;
+  padding:20px 10px;
+}
+
+.page-head{
+  display:flex;align-items:center;gap:10px;margin-bottom:12px
+}
+.back-btn{
+  border:1px solid var(--border);background:#fff;border-radius:10px;
+  padding:9px 12px;font-weight:600;color:var(--text)
+}
+.page-head h1{font-size:23px;margin:0}
+.alert{
+  background:#fff8e7;border:1px solid #efd58d;color:#805600;
+  border-radius:12px;padding:12px;font-size:12px;margin-bottom:12px
+}
+.field label{display:block;font-size:13px;font-weight:700;margin:14px 0 6px}
+select,input,textarea{
+  width:100%;padding:12px;border:1px solid #cbd8e4;
+  border-radius:10px;background:#fff;margin:0;color:var(--text)
+}
+textarea{min-height:100px;resize:vertical}
+.big{
+  width:100%;padding:13px;border-radius:11px;
+  border:0;font-weight:700;margin-top:10px
+}
+.primary{background:var(--blue);color:#fff}
+.outline{background:#fff;border:1px solid var(--border);color:var(--text)}
+.danger{background:var(--red);color:#fff}
+
+.level-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:9px;
+}
+.level-card{
+  min-height:116px;border:1px solid var(--border);border-radius:14px;
+  background:#fff;position:relative;overflow:hidden;
+  padding:12px 7px 8px;text-align:center;
+  cursor:pointer;
+}
+.level-card:hover{border-color:#9bbce0}
+.level-card.selected{outline:3px solid rgba(21,87,166,.18);border-color:var(--blue)}
+.level-water{
+  height:34px;position:absolute;left:0;right:0;bottom:0;opacity:.9;
+}
+.level-person{font-size:28px;line-height:1;margin-top:0}
+.level-name{font-weight:700;font-size:12px;position:relative;z-index:1}
+.level-height{font-size:10px;color:var(--muted);position:relative;z-index:1}
+.trend-grid,.pass-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.choice{
+  border:1px solid var(--border);background:#fff;border-radius:11px;
+  padding:11px 7px;text-align:center;font-weight:600;font-size:12px
+}
+.choice.selected{background:#edf5ff;border-color:var(--blue);color:var(--blue)}
+#map,#levelmap{height:360px;border-radius:12px;z-index:1}
+.map-wrap{padding:0 16px 16px}
+.selected-text{font-size:12px;color:var(--muted);margin:8px 0 0}
+.file-box{border:1px dashed #b9c8d8;padding:12px;border-radius:11px;background:#fafcff}
+.file-box input{border:0;padding:0;margin:0;background:transparent}
+
+.modal{
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(10,32,52,.72);padding:14px;overflow:auto;
+  align-items:center;justify-content:center
+}
+.modal.open{display:flex}
+.modal-content{
+  width:min(560px,100%);max-height:94vh;overflow:auto;
+  background:#fff;border-radius:18px;padding:18px
+}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.modal-head h2{font-size:18px;margin:0}
+.close{border:1px solid var(--border);background:#fff;border-radius:9px;padding:7px 10px}
+.records > div{
+  border:1px solid var(--border);border-radius:11px;padding:12px;margin-top:8px;
+  background:#fff;font-size:12px
+}
+.records p{margin:5px 0;color:var(--muted)}
+.muted{color:var(--muted);font-size:12px}
+
+@media(max-width:760px){
+  .topbar-inner{padding:10px 12px}
+  .brand-title{font-size:15px}
+  .brand-sub{font-size:10px}
+  .nav-btn{padding:8px 9px;font-size:11px}
+  .nav-btn.hide-mobile{display:none}
+  main{padding:14px 12px 30px}
+  .hero{padding:17px;border-radius:16px}
+  .hero h1{font-size:22px}
+  .hero-report{padding:10px 11px;font-size:11px}
+  .quick-grid{grid-template-columns:repeat(2,1fr)}
+  .status-summary{grid-template-columns:repeat(2,1fr)}
+  .status-item:nth-child(2){border-right:0}
+  .status-item:nth-child(-n+2){border-bottom:1px solid var(--border)}
+  .emergency{grid-template-columns:1fr}
+  .level-grid{grid-template-columns:repeat(2,1fr)}
+  .trend-grid,.pass-grid{grid-template-columns:1fr 1fr 1fr}
+  #map,#levelmap{height:300px}
+}
+@media(max-width:420px){
+  .hero-row{align-items:flex-start}
+  .hero-report{white-space:normal}
+  .location-actions{grid-template-columns:1fr}
+  .trend-grid,.pass-grid{grid-template-columns:1fr}
+  .level-grid{gap:7px}
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="brand">
-    ≋ ศูนย์ช่วยเหลือน้ำท่วม
-    <small>จังหวัดพิจิตร · PHICHIT FLOOD CENTER</small>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#" onclick="showPage('home');return false;">
+      <span class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 7c3 0 3-2 6-2s3 2 6 2 3-2 6-2"/>
+          <path d="M3 12c3 0 3-2 6-2s3 2 6 2 3-2 6-2"/>
+          <path d="M3 17c3 0 3-2 6-2s3 2 6 2 3-2 6-2"/>
+        </svg>
+      </span>
+      <span>
+        <span class="brand-title">ศูนย์ช่วยเหลือน้ำท่วม</span>
+        <span class="brand-sub">จังหวัดพิจิตร · PHICHIT FLOOD CENTER</span>
+      </span>
+    </a>
+
+    <div class="nav-actions">
+      <button class="nav-btn active hide-mobile" id="nav-home" onclick="showPage('home')">หน้าหลัก</button>
+      <button class="nav-btn" id="nav-levels" onclick="showPage('levels')">≋ รายงานระดับน้ำ</button>
+      <button class="nav-btn nav-danger" onclick="openReport()">☎ โทร/แจ้งเหตุ</button>
+    </div>
   </div>
-  <nav>
-    <button class="outline" onclick="showPage('home')">หน้าหลัก</button>
-    <button class="outline" onclick="showPage('levels')">รายงานระดับน้ำ</button>
-    <button class="danger" onclick="openReport()">แจ้งเหตุ</button>
-  </nav>
 </header>
 
 <main>
 
-<!-- หน้าแรก -->
+<!-- ================= HOME ================= -->
 <section id="home" class="page active">
-  <p style="color:#1557a6;font-weight:700">FLOOD SITUATION · PHICHIT</p>
-  <h1>ติดตามสถานการณ์น้ำท่วม<br>จังหวัดพิจิตร</h1>
-  <p class="muted">ตรวจสอบพื้นที่ใกล้ตัว ดูแผนที่ และรายงานเหตุได้ในที่เดียว</p>
 
-  <div class="alert">
-    <strong>⚠ โปรดตรวจสอบประกาศจากหน่วยงานทางการ</strong><br>
-    <span class="muted">เว็บไซต์ตัวอย่างนี้ยังไม่ได้เชื่อมต่อข้อมูลระดับน้ำแบบเรียลไทม์</span>
+  <section class="hero">
+    <div class="hero-row">
+      <div class="hero-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9">
+          <path d="M3 7c3 0 3-2 6-2s3 2 6 2 3-2 6-2"/>
+          <path d="M3 12c3 0 3-2 6-2s3 2 6 2 3-2 6-2"/>
+          <path d="M3 17c3 0 3-2 6-2s3 2 6 2 3-2 6-2"/>
+        </svg>
+      </div>
+      <div class="hero-copy">
+        <h1>รายงานระดับน้ำ</h1>
+        <p>บอกระดับน้ำและสถานการณ์จากพื้นที่จริง ใช้เวลาไม่กี่นาที</p>
+      </div>
+      <button class="hero-report" onclick="showPage('levels')">ส่งรายงาน →</button>
+    </div>
+  </section>
+
+  <div class="section-title">น้ำท่วมใกล้บ้านฉัน?</div>
+  <section class="card location-card">
+    <div class="location-head">
+      <span>📍 เลือกพื้นที่เพื่อตรวจสอบ</span>
+      <span class="muted">พิจิตร</span>
+    </div>
+    <div class="location-actions">
+      <button class="location-btn primary" onclick="useLocation()">⌖ ตรวจใกล้ฉัน</button>
+      <button class="location-btn" onclick="document.getElementById('district').focus()">⌖ เลือกอำเภอ</button>
+    </div>
+    <div class="location-note">ตำแหน่งใช้สำหรับแสดงพื้นที่บนแผนที่เท่านั้น ไม่ถูกส่งไปยังระบบกลาง</div>
+  </section>
+
+  <div class="section-title">สถานการณ์น้ำตอนนี้</div>
+  <section class="card">
+    <div class="card-body">
+      <div class="muted" style="margin-bottom:9px">ข้อมูลในเว็บไซต์ต้นแบบนี้ยังไม่ได้เชื่อมต่อสถานีวัดน้ำแบบเรียลไทม์</div>
+      <div class="status-summary">
+        <div class="status-item"><span class="dot green"></span><span class="status-name">ปกติ</span><span class="status-sub">รอข้อมูล</span></div>
+        <div class="status-item"><span class="dot yellow"></span><span class="status-name">เฝ้าระวัง</span><span class="status-sub">รอข้อมูล</span></div>
+        <div class="status-item"><span class="dot orange"></span><span class="status-name">น้ำมาก</span><span class="status-sub">รอข้อมูล</span></div>
+        <div class="status-item"><span class="dot red"></span><span class="status-name">น้ำท่วม</span><span class="status-sub">รอข้อมูล</span></div>
+      </div>
+      <div class="row" style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:10px">
+        <select id="district">
+          <option value="">เลือกอำเภอในจังหวัดพิจิตร</option>
+          <option>เมืองพิจิตร</option><option>วังทรายพูน</option><option>โพธิ์ประทับช้าง</option>
+          <option>ตะพานหิน</option><option>บางมูลนาก</option><option>โพทะเล</option>
+          <option>สามง่าม</option><option>ทับคล้อ</option><option>สากเหล็ก</option>
+          <option>บึงนาราง</option><option>ดงเจริญ</option><option>วชิรบารมี</option>
+        </select>
+        <button class="outline" style="padding:12px" onclick="selectDistrict()">ดูพื้นที่</button>
+      </div>
+      <p id="area-message" class="muted" style="margin:4px 0 0">ยังไม่มีข้อมูลระดับน้ำที่ยืนยันได้</p>
+    </div>
+  </section>
+
+  <div class="section-title">เมนูสำคัญ</div>
+  <div class="quick-grid">
+    <a class="quick-link" href="#map-section" onclick="scrollToId('map-section')">
+      <span class="quick-icon">🗺️</span><span class="quick-label">แผนที่ระดับน้ำ</span><span class="quick-note">ดูตำแหน่งบนแผนที่</span>
+    </a>
+    <a class="quick-link" href="#levels" onclick="showPage('levels');return false;">
+      <span class="quick-icon">🌊</span><span class="quick-label">รายงานระดับน้ำ</span><span class="quick-note">แจ้งระดับน้ำจากพื้นที่จริง</span>
+    </a>
+    <a class="quick-link" href="#shelter" onclick="scrollToId('shelter')">
+      <span class="quick-icon">🏠</span><span class="quick-label">พื้นที่ของฉัน</span><span class="quick-note">ค้นหาพื้นที่ใกล้ตัว</span>
+    </a>
+    <a class="quick-link" href="#emergency" onclick="scrollToId('emergency')">
+      <span class="quick-icon">☎</span><span class="quick-label">เบอร์ฉุกเฉิน</span><span class="quick-note">ติดต่อหน่วยงานช่วยเหลือ</span>
+    </a>
   </div>
 
-  <section class="card">
-    <h2>⌖ น้ำท่วมใกล้บ้านฉันไหม?</h2>
-    <p class="muted">เลือกพื้นที่เพื่อดูตำแหน่งบนแผนที่</p>
+  <div class="section-title">ข้อมูลช่วยเหลือ</div>
+  <div class="info-list">
+    <a class="info-link" href="#map-section" onclick="scrollToId('map-section')">
+      <span class="info-icon">⌖</span>
+      <span class="info-main"><span class="info-title">แผนที่ระดับน้ำ</span><span class="info-desc">ดูพื้นที่ รายงาน และจุดที่ประชาชนแจ้งเข้ามา</span></span>
+      <span class="chevron">›</span>
+    </a>
+    <a class="info-link" href="#records" onclick="scrollToId('records')">
+      <span class="info-icon">↻</span>
+      <span class="info-main"><span class="info-title">อัปเดตระดับน้ำล่าสุด</span><span class="info-desc">ดูรายงานที่ถูกบันทึกจากอุปกรณ์นี้</span></span>
+      <span class="chevron">›</span>
+    </a>
+    <a class="info-link" href="#shelter" onclick="scrollToId('shelter')">
+      <span class="info-icon">⌂</span>
+      <span class="info-main"><span class="info-title">จุดอพยพ / ศูนย์พักพิง</span><span class="info-desc">ข้อมูลตัวอย่าง — ควรยืนยันกับหน่วยงานท้องถิ่นก่อนเดินทาง</span></span>
+      <span class="chevron">›</span>
+    </a>
+    <a class="info-link" href="#records" onclick="scrollToId('records')">
+      <span class="info-icon">☷</span>
+      <span class="info-main"><span class="info-title">รายงานจากประชาชน</span><span class="info-desc">เหตุการณ์และระดับน้ำที่มีการแจ้งผ่านเว็บไซต์นี้</span></span>
+      <span class="chevron">›</span>
+    </a>
+  </div>
 
-    <div class="actions">
-      <button class="primary big" onclick="useLocation()">⌖ ใช้ตำแหน่งของฉัน</button>
-      <button class="secondary big" onclick="document.getElementById('district').focus()">📍 เลือกอำเภอ</button>
+  <div class="section-title" id="map-section">แผนที่จังหวัดพิจิตร</div>
+  <section class="card">
+    <div class="card-body">
+      <div class="muted" style="margin-bottom:9px">แตะบนแผนที่เพื่อเลือกพิกัดเหตุการณ์</div>
+      <div id="map"></div>
+      <p id="coordinates" class="selected-text">พิกัดจังหวัดพิจิตร: 16.44, 100.35</p>
     </div>
+  </section>
 
-    <div class="row">
-      <select id="district">
-        <option value="">เลือกอำเภอในจังหวัดพิจิตร</option>
-        <option>เมืองพิจิตร</option>
-        <option>วังทรายพูน</option>
-        <option>โพธิ์ประทับช้าง</option>
-        <option>ตะพานหิน</option>
-        <option>บางมูลนาก</option>
-        <option>โพทะเล</option>
-        <option>สามง่าม</option>
-        <option>ทับคล้อ</option>
-        <option>สากเหล็ก</option>
-        <option>บึงนาราง</option>
-        <option>ดงเจริญ</option>
-        <option>วชิรบารมี</option>
-      </select>
-      <button class="outline" onclick="selectDistrict()">ดูพื้นที่</button>
+  <div class="section-title" id="shelter">ข้อมูลสำคัญ</div>
+  <div class="info-list">
+    <div class="info-link">
+      <span class="info-icon">🏠</span>
+      <span class="info-main"><span class="info-title">ศูนย์พักพิง / จุดอพยพ</span><span class="info-desc">ยังไม่มีฐานข้อมูลกลางในเว็บไซต์ต้นแบบนี้</span></span>
     </div>
-
-    <div class="status">
-      <div><span class="dot green"></span><b>ปกติ</b><br><small>รอข้อมูล</small></div>
-      <div><span class="dot yellow"></span><b>เฝ้าระวัง</b><br><small>รอข้อมูล</small></div>
-      <div><span class="dot orange"></span><b>น้ำมาก</b><br><small>รอข้อมูล</small></div>
-      <div><span class="dot red"></span><b>น้ำท่วม</b><br><small>รอข้อมูล</small></div>
+    <div class="info-link">
+      <span class="info-icon">☁</span>
+      <span class="info-main"><span class="info-title">พยากรณ์อากาศ</span><span class="info-desc">สามารถเชื่อม API ภายหลังได้ โดยไม่ต้องเปลี่ยนโครงหน้า</span></span>
     </div>
-    <p id="area-message" class="muted">ยังไม่มีข้อมูลระดับน้ำที่ยืนยันได้</p>
-  </section>
-
-  <section class="card">
-    <h2>🌊 แผนที่จังหวัดพิจิตร</h2>
-    <p class="muted">แตะบนแผนที่เพื่อเลือกพิกัดเหตุการณ์</p>
-    <div id="map"></div>
-    <p id="coordinates" class="muted">พิกัดจังหวัดพิจิตร: 16.44, 100.35</p>
-  </section>
-
-  <section class="card">
-    <h2>🚨 พบเหตุหรือผู้ประสบภัย?</h2>
-    <p class="muted">แจ้งตำแหน่ง รูปภาพ และรายละเอียดให้ทีมงานตรวจสอบ</p>
-    <button class="danger big" onclick="openReport()">＋ แจ้งเหตุภัยพิบัติ</button>
-  </section>
-
-  <section class="card">
-    <h2>☎ เบอร์โทรฉุกเฉิน</h2>
-    <div class="grid">
-      <div>
-        <b>กรมป้องกันและบรรเทาสาธารณภัย</b><br>
-        <a href="tel:1784" style="font-size:25px;color:#1557a6">1784</a>
-      </div>
-      <div>
-        <b>การแพทย์ฉุกเฉิน</b><br>
-        <a href="tel:1669" style="font-size:25px;color:#1557a6">1669</a>
-      </div>
+    <div class="info-link">
+      <span class="info-icon">⚠</span>
+      <span class="info-main"><span class="info-title">พบเหตุหรือผู้ประสบภัย?</span><span class="info-desc">แจ้งตำแหน่ง รูปภาพ และรายละเอียดให้ทีมงานตรวจสอบ</span></span>
+      <button class="danger" style="padding:8px 10px" onclick="openReport()">แจ้งเหตุ</button>
     </div>
-    <hr style="border:0;border-top:1px solid #d6e0eb;margin:18px 0">
-    <h2>⌂ ศูนย์พักพิง / จุดอพยพ</h2>
-    <p class="muted">โปรดยืนยันสถานที่เปิดใช้งานกับจังหวัดหรือหน่วยงานท้องถิ่นก่อนเดินทาง</p>
+  </div>
+
+  <div class="section-title" id="records">รายงานล่าสุดจากอุปกรณ์นี้</div>
+  <section class="records" id="records-list">
+    <div class="card card-body"><span class="muted">ยังไม่มีรายงาน</span></div>
   </section>
 
-  <section class="card">
-    <h2>รายงานจากประชาชน</h2>
-    <div id="records"></div>
-  </section>
+  <div class="section-title" id="emergency">เบอร์ฉุกเฉิน</div>
+  <div class="emergency">
+    <a href="tel:1784"><span class="emergency-name">กรมป้องกันและบรรเทาสาธารณภัย</span><span class="emergency-number">1784</span></a>
+    <a href="tel:1669"><span class="emergency-name">การแพทย์ฉุกเฉิน</span><span class="emergency-number">1669</span></a>
+    <a href="tel:191"><span class="emergency-name">เหตุด่วนเหตุร้าย</span><span class="emergency-number">191</span></a>
+  </div>
+
+  <p class="source-note">⚠ เว็บไซต์นี้เป็นต้นแบบสำหรับช่วยรวบรวมข้อมูลจากประชาชน ไม่ใช่ระบบราชการอย่างเป็นทางการ โปรดตรวจสอบประกาศจากหน่วยงานทางการ</p>
 </section>
 
-<!-- หน้ารายงานระดับน้ำ -->
+
+<!-- ================= LEVEL REPORT ================= -->
 <section id="levels" class="page">
-  <button class="outline" onclick="showPage('home')">← กลับหน้าหลัก</button>
-  <h1>≋ รายงานระดับน้ำ</h1>
-  <p class="muted">จังหวัดพิจิตร · รายงานระดับน้ำจากการสังเกตของประชาชน</p>
+  <div class="page-head">
+    <button class="back-btn" onclick="showPage('home')">← กลับ</button>
+    <div>
+      <h1>รายงานระดับน้ำ</h1>
+      <div class="muted">รายงานสถานการณ์จากพื้นที่จริง</div>
+    </div>
+  </div>
 
   <div class="alert">
-    ข้อมูลที่ส่งเป็นรายงานจากประชาชน ไม่ใช่ข้อมูลจากสถานีวัดน้ำทางการ
+    ข้อมูลที่ส่งเป็นรายงานจากประชาชน ไม่ใช่ข้อมูลจากสถานีวัดน้ำทางการ กรุณาตรวจสอบสถานการณ์กับหน่วยงานที่เกี่ยวข้องในกรณีฉุกเฉิน
   </div>
 
   <section class="card">
-    <h2>1. ตำแหน่ง</h2>
-    <button class="primary big" onclick="useLevelLocation()">⌖ ใช้ตำแหน่งปัจจุบัน</button>
-    <button class="outline big" onclick="chooseOnMap()">⌖ เลือกจุดบนแผนที่</button>
-    <input id="level-location" placeholder="พิกัดหรือชื่อสถานที่">
+    <div class="card-body">
+      <div class="section-title" style="margin-top:0">1. ตำแหน่ง</div>
+      <button class="primary big" onclick="useLevelLocation()">⌖ ใช้ตำแหน่งปัจจุบัน</button>
+      <button class="outline big" onclick="chooseOnMap()">⌖ เลือกจุดบนแผนที่</button>
+      <input id="level-location" placeholder="พิกัดหรือชื่อสถานที่">
 
-    <h2 style="margin-top:20px">2. ระดับน้ำ</h2>
-    <div class="status">
-      <div onclick="setLevel('แห้ง / ต่ำกว่าเข่า')">ระดับ 1<br><b>แห้ง / ต่ำกว่าเข่า</b><br><small>&lt; 10 ซม.</small></div>
-      <div onclick="setLevel('เข่า–เอว')">ระดับ 2<br><b>เข่า–เอว</b><br><small>10–50 ซม.</small></div>
-      <div onclick="setLevel('เอว–อก')">ระดับ 3<br><b>เอว–อก</b><br><small>50–100 ซม.</small></div>
-      <div onclick="setLevel('อก–คอ')">ระดับ 4<br><b>อก–คอ</b><br><small>100–130 ซม.</small></div>
-      <div onclick="setLevel('อกขึ้นไป')">ระดับ 5<br><b>อกขึ้นไป</b><br><small>130–180 ซม.</small></div>
-      <div onclick="setLevel('มิดหัว / ท่วมหลังคา')">ระดับ 6<br><b>มิดหัว / ท่วมหลังคา</b><br><small>&gt; 180 ซม.</small></div>
+      <div class="section-title">2. ระดับน้ำ</div>
+      <div class="level-grid">
+        <button class="level-card" onclick="setLevel(this,'แห้ง / ต่ำกว่าเข่า')">
+          <div class="level-person">🧍</div><div class="level-name">แห้ง / ต่ำกว่าเข่า</div><div class="level-height">&lt; 10 ซม.</div><div class="level-water" style="background:#63cf8c;height:12px"></div>
+        </button>
+        <button class="level-card" onclick="setLevel(this,'เข่า–เอว')">
+          <div class="level-person">🧍</div><div class="level-name">เข่า–เอว</div><div class="level-height">10–50 ซม.</div><div class="level-water" style="background:#e7bd45;height:28px"></div>
+        </button>
+        <button class="level-card" onclick="setLevel(this,'เอว–อก')">
+          <div class="level-person">🧍</div><div class="level-name">เอว–อก</div><div class="level-height">50–100 ซม.</div><div class="level-water" style="background:#ee8445;height:45px"></div>
+        </button>
+        <button class="level-card" onclick="setLevel(this,'อก–คอ')">
+          <div class="level-person">🧍</div><div class="level-name">อก–คอ</div><div class="level-height">100–130 ซม.</div><div class="level-water" style="background:#df4949;height:62px"></div>
+        </button>
+        <button class="level-card" onclick="setLevel(this,'อกขึ้นไป')">
+          <div class="level-person">🧍</div><div class="level-name">อกขึ้นไป</div><div class="level-height">130–180 ซม.</div><div class="level-water" style="background:#bb3e72;height:80px"></div>
+        </button>
+        <button class="level-card" onclick="setLevel(this,'มิดหัว / ท่วมหลังคา')">
+          <div class="level-person">🧍</div><div class="level-name">มิดหัว / ท่วมหลังคา</div><div class="level-height">&gt; 180 ซม.</div><div class="level-water" style="background:#653da7;height:100px"></div>
+        </button>
+      </div>
+      <p id="selected-level" class="selected-text">ยังไม่ได้เลือกระดับน้ำ</p>
+
+      <div class="section-title">3. แนวโน้มและรถผ่านได้ไหม</div>
+      <div class="trend-grid">
+        <button class="choice" onclick="chooseTrend(this,'น้ำกำลังขึ้น')">↑<br>น้ำกำลังขึ้น</button>
+        <button class="choice" onclick="chooseTrend(this,'ทรงตัว')">→<br>ทรงตัว</button>
+        <button class="choice" onclick="chooseTrend(this,'กำลังลดลง')">↓<br>กำลังลดลง</button>
+      </div>
+      <div class="pass-grid" style="margin-top:8px">
+        <button class="choice" onclick="chooseTrend(this,'รถเก๋ง / กระบะผ่านได้')">🚗<br>รถเก๋ง / กระบะผ่านได้</button>
+        <button class="choice" onclick="chooseTrend(this,'เฉพาะรถสูง')">🛻<br>เฉพาะรถสูง</button>
+        <button class="choice" onclick="chooseTrend(this,'เรือเท่านั้น')">🚤<br>เรือเท่านั้น</button>
+      </div>
+
+      <label class="field" style="margin-top:14px">หมายเหตุ</label>
+      <textarea id="level-detail" placeholder="เช่น น้ำเข้าบ้านประมาณ 20 ซม. รถเล็กผ่านไม่ได้"></textarea>
+
+      <label class="field">แนบรูป (ไม่บังคับ)</label>
+      <div class="file-box">
+        <input id="level-photo" type="file" accept="image/*" capture="environment">
+      </div>
+
+      <button class="primary big" onclick="submitLevel()">➤ ส่งรายงานระดับน้ำ</button>
     </div>
-    <p id="selected-level" class="muted">ยังไม่ได้เลือกระดับน้ำ</p>
-
-    <h2 style="margin-top:20px">3. แนวโน้มและรายละเอียด</h2>
-    <select id="trend">
-      <option>ไม่แน่ใจ</option>
-      <option>น้ำกำลังขึ้น</option>
-      <option>ทรงตัว</option>
-      <option>กำลังลด</option>
-      <option>รถเก๋ง / กระบะผ่านได้</option>
-      <option>เฉพาะรถสูง</option>
-      <option>เรือเท่านั้น</option>
-    </select>
-    <textarea id="level-detail" placeholder="หมายเหตุ (ถ้ามี)"></textarea>
-
-    <label><b>แนบรูป (ไม่บังคับ)</b></label>
-    <input id="level-photo" type="file" accept="image/*" capture="environment">
-
-    <button class="primary big" onclick="submitLevel()">➤ ส่งรายงานระดับน้ำ</button>
   </section>
 
   <section class="card">
-    <h2>แผนที่เลือกตำแหน่ง</h2>
-    <div id="levelmap"></div>
+    <div class="card-body">
+      <div class="section-title" style="margin-top:0">แผนที่เลือกตำแหน่ง</div>
+      <div id="levelmap"></div>
+    </div>
   </section>
 </section>
+
+</main>
 
 <footer>
   ศูนย์ช่วยเหลือน้ำท่วม จังหวัดพิจิตร<br>
-  เว็บไซต์ต้นแบบ ไม่ใช่ระบบราชการอย่างเป็นทางการ
+  เว็บไซต์ต้นแบบ · PHICHIT FLOOD CENTER
 </footer>
-</main>
 
-<!-- หน้าต่างแจ้งเหตุ -->
+<!-- REPORT MODAL -->
 <div id="report-modal" class="modal">
   <div class="modal-content">
     <div class="modal-head">
       <h2>🚨 แจ้งเหตุภัยพิบัติ</h2>
-      <button class="outline" onclick="closeReport()">✕</button>
+      <button class="close" onclick="closeReport()">✕</button>
     </div>
 
     <form id="report-form">
-      <label>ประเภทเหตุการณ์ *</label>
+      <label class="field">ประเภทเหตุการณ์ *</label>
       <select id="incident-type" required>
         <option value="">เลือกประเภทภัยพิบัติ</option>
         <option>น้ำท่วมบ้านเรือน</option>
@@ -347,235 +596,282 @@ footer {
         <option>เหตุอื่น ๆ</option>
       </select>
 
-      <label>อำเภอที่เกิดเหตุ *</label>
+      <label class="field">อำเภอที่เกิดเหตุ *</label>
       <select id="incident-district" required>
         <option value="">เลือกอำเภอ</option>
-        <option>เมืองพิจิตร</option>
-        <option>วังทรายพูน</option>
-        <option>โพธิ์ประทับช้าง</option>
-        <option>ตะพานหิน</option>
-        <option>บางมูลนาก</option>
-        <option>โพทะเล</option>
-        <option>สามง่าม</option>
-        <option>ทับคล้อ</option>
-        <option>สากเหล็ก</option>
-        <option>บึงนาราง</option>
-        <option>ดงเจริญ</option>
-        <option>วชิรบารมี</option>
+        <option>เมืองพิจิตร</option><option>วังทรายพูน</option><option>โพธิ์ประทับช้าง</option>
+        <option>ตะพานหิน</option><option>บางมูลนาก</option><option>โพทะเล</option>
+        <option>สามง่าม</option><option>ทับคล้อ</option><option>สากเหล็ก</option>
+        <option>บึงนาราง</option><option>ดงเจริญ</option><option>วชิรบารมี</option>
       </select>
 
-      <label>ตำแหน่งเกิดเหตุ</label>
+      <label class="field">ตำแหน่งเกิดเหตุ</label>
       <input id="incident-location" placeholder="พิมพ์สถานที่หรือพิกัด">
-      <button type="button" class="secondary" onclick="useIncidentLocation()">⌖ ใช้ตำแหน่งของฉัน</button>
+      <button type="button" class="outline big" onclick="useIncidentLocation()">⌖ ใช้ตำแหน่งของฉัน</button>
 
-      <label>แนบรูป / ถ่ายรูป</label>
-      <input id="incident-photo" type="file" accept="image/*" capture="environment">
+      <label class="field">แนบรูป / ถ่ายรูป</label>
+      <div class="file-box"><input id="incident-photo" type="file" accept="image/*" capture="environment"></div>
 
-      <label>รายละเอียดเหตุการณ์ *</label>
+      <label class="field">รายละเอียดเหตุการณ์ *</label>
       <textarea id="incident-detail" required placeholder="เกิดอะไรขึ้น มีผู้ติดค้างหรือไม่"></textarea>
 
-      <label>เบอร์ติดต่อ *</label>
+      <label class="field">เบอร์ติดต่อ *</label>
       <input id="incident-phone" type="tel" required placeholder="เบอร์โทรศัพท์">
 
       <button class="danger big" type="submit">➤ ส่งแจ้งเหตุ</button>
     </form>
-    <p class="muted">หมายเหตุ: เวอร์ชันนี้เก็บข้อมูลในเบราว์เซอร์เท่านั้น ยังไม่ได้ส่งไปยังฐานข้อมูลส่วนกลาง</p>
+    <p class="muted" style="margin-bottom:0">หมายเหตุ: เวอร์ชันนี้เก็บข้อมูลในเบราว์เซอร์เท่านั้น ยังไม่ได้ส่งไปยังฐานข้อมูลส่วนกลาง</p>
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-let map, levelMap, selectedLevel = "";
+let map, levelMap;
+let selectedLevel = "";
+let selectedTrend = "";
 let selectedCoords = null;
 
-function showPage(id) {
-  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+const locations = {
+  "เมืองพิจิตร":[16.44,100.35],
+  "วังทรายพูน":[16.39,100.54],
+  "โพธิ์ประทับช้าง":[16.32,100.27],
+  "ตะพานหิน":[16.22,100.42],
+  "บางมูลนาก":[16.03,100.38],
+  "โพทะเล":[16.09,100.26],
+  "สามง่าม":[16.51,100.20],
+  "ทับคล้อ":[16.16,100.59],
+  "สากเหล็ก":[16.50,100.47],
+  "บึงนาราง":[16.17,100.10],
+  "ดงเจริญ":[16.02,100.55],
+  "วชิรบารมี":[16.53,100.13]
+};
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-  window.scrollTo(0, 0);
-  setTimeout(() => {
-    if (map) map.invalidateSize();
-    if (levelMap) levelMap.invalidateSize();
-  }, 150);
+
+  document.getElementById("nav-home").classList.toggle("active",id==="home");
+  document.getElementById("nav-levels").classList.toggle("active",id==="levels");
+
+  window.scrollTo({top:0,behavior:"smooth"});
+  setTimeout(()=>{
+    if(map) map.invalidateSize();
+    if(levelMap) levelMap.invalidateSize();
+  },180);
 }
 
-function openReport() {
-  document.getElementById("report-modal").classList.add("open");
-}
-function closeReport() {
-  document.getElementById("report-modal").classList.remove("open");
+function scrollToId(id){
+  setTimeout(()=>{
+    const el=document.getElementById(id);
+    if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+  },50);
 }
 
-function selectDistrict() {
-  const d = document.getElementById("district").value;
-  if (!d) return alert("กรุณาเลือกอำเภอ");
+function openReport(){document.getElementById("report-modal").classList.add("open")}
+function closeReport(){document.getElementById("report-modal").classList.remove("open")}
+
+function selectDistrict(){
+  const d=document.getElementById("district").value;
+  if(!d){alert("กรุณาเลือกอำเภอ");return}
+  const c=locations[d]||locations["เมืองพิจิตร"];
   document.getElementById("area-message").textContent =
-    "พื้นที่ที่เลือก: อำเภอ" + d + " — ยังไม่มีข้อมูลน้ำแบบเรียลไทม์";
-  const locations = {
-    "เมืองพิจิตร":[16.44,100.35],
-    "วังทรายพูน":[16.39,100.54],
-    "โพธิ์ประทับช้าง":[16.32,100.27],
-    "ตะพานหิน":[16.22,100.42],
-    "บางมูลนาก":[16.03,100.38],
-    "โพทะเล":[16.09,100.26],
-    "สามง่าม":[16.51,100.20],
-    "ทับคล้อ":[16.16,100.59],
-    "สากเหล็ก":[16.50,100.47],
-    "บึงนาราง":[16.17,100.10],
-    "ดงเจริญ":[16.02,100.55],
-    "วชิรบารมี":[16.53,100.13]
-  };
-  const c = locations[d] || [16.44,100.35];
-  map.setView(c, 12);
+    "พื้นที่ที่เลือก: อำเภอ"+d+" — ยังไม่มีข้อมูลน้ำแบบเรียลไทม์";
+  if(map) map.setView(c,12);
 }
 
-function useLocation() {
-  getLocation(c => {
-    selectedCoords = c;
-    map.setView(c, 14);
-    L.marker(c).addTo(map).bindPopup("ตำแหน่งของคุณ").openPopup();
-    document.getElementById("coordinates").textContent =
-      "พิกัด: " + c[0].toFixed(5) + ", " + c[1].toFixed(5);
-  });
-}
-
-function getLocation(callback) {
-  if (!navigator.geolocation) return alert("เบราว์เซอร์ไม่รองรับตำแหน่ง");
+function getLocation(callback){
+  if(!navigator.geolocation){
+    alert("เบราว์เซอร์ไม่รองรับตำแหน่ง");
+    return;
+  }
   navigator.geolocation.getCurrentPosition(
-    p => callback([p.coords.latitude,p.coords.longitude]),
-    () => alert("ระบุตำแหน่งไม่ได้ กรุณาอนุญาตการเข้าถึงตำแหน่ง"),
+    p=>callback([p.coords.latitude,p.coords.longitude]),
+    ()=>alert("ระบุตำแหน่งไม่ได้ กรุณาอนุญาตการเข้าถึงตำแหน่ง"),
     {enableHighAccuracy:true,timeout:10000}
   );
 }
 
-function useIncidentLocation() {
-  getLocation(c => {
+function useLocation(){
+  getLocation(c=>{
+    selectedCoords=c;
+    if(map){
+      map.setView(c,14);
+      L.marker(c).addTo(map).bindPopup("ตำแหน่งของคุณ").openPopup();
+    }
+    document.getElementById("coordinates").textContent =
+      "พิกัด: "+c[0].toFixed(5)+", "+c[1].toFixed(5);
+  });
+}
+
+function useIncidentLocation(){
+  getLocation(c=>{
     document.getElementById("incident-location").value =
-      c[0].toFixed(6) + ", " + c[1].toFixed(6);
+      c[0].toFixed(6)+", "+c[1].toFixed(6);
   });
 }
 
-function useLevelLocation() {
-  getLocation(c => {
-    selectedCoords = c;
+function useLevelLocation(){
+  getLocation(c=>{
+    selectedCoords=c;
     document.getElementById("level-location").value =
-      c[0].toFixed(6) + ", " + c[1].toFixed(6);
-    levelMap.setView(c, 14);
-    L.marker(c).addTo(levelMap).bindPopup("ตำแหน่งรายงาน").openPopup();
+      c[0].toFixed(6)+", "+c[1].toFixed(6);
+    if(levelMap){
+      levelMap.setView(c,14);
+      L.marker(c).addTo(levelMap).bindPopup("ตำแหน่งรายงาน").openPopup();
+    }
   });
 }
 
-function chooseOnMap() {
+function chooseOnMap(){
   showPage("levels");
-  document.getElementById("levelmap").scrollIntoView({behavior:"smooth"});
-  alert("แตะบนแผนที่เพื่อเลือกพิกัด");
+  setTimeout(()=>document.getElementById("levelmap").scrollIntoView({behavior:"smooth"}),100);
 }
 
-function setLevel(level) {
-  selectedLevel = level;
-  document.getElementById("selected-level").textContent =
-    "ระดับน้ำที่เลือก: " + level;
+function setLevel(el,level){
+  selectedLevel=level;
+  document.querySelectorAll(".level-card").forEach(x=>x.classList.remove("selected"));
+  el.classList.add("selected");
+  document.getElementById("selected-level").textContent="ระดับน้ำที่เลือก: "+level;
 }
 
-function getRecords() {
-  try {
-    return JSON.parse(localStorage.getItem("phichit-reports") || "[]");
-  } catch(e) { return []; }
+function chooseTrend(el,value){
+  selectedTrend=value;
+  const group=el.parentElement;
+  group.querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));
+  el.classList.add("selected");
 }
 
-function saveRecord(record) {
-  const records = getRecords();
+function getRecords(){
+  try{return JSON.parse(localStorage.getItem("phichit-reports")||"[]")}
+  catch(e){return[]}
+}
+
+function saveRecord(record){
+  const records=getRecords();
   records.push(record);
-  try {
-    localStorage.setItem("phichit-reports", JSON.stringify(records));
-  } catch(e) {
+  try{
+    localStorage.setItem("phichit-reports",JSON.stringify(records));
+    renderRecords();
+  }catch(e){
     alert("บันทึกไม่ได้ พื้นที่จัดเก็บอาจเต็ม");
-    return;
   }
-  renderRecords();
 }
 
-function renderRecords() {
-  const el = document.getElementById("records");
-  const records = getRecords().slice().reverse();
-  if (!records.length) {
-    el.innerHTML = '<p class="muted">ยังไม่มีรายงาน</p>';
-    return;
-  }
-  el.innerHTML = records.map(r =>
-    "<div><b>" + escapeHTML(r.title) + "</b><p>" +
-    escapeHTML(r.area) + " · " + escapeHTML(r.time) +
-    "</p><p>" + escapeHTML(r.detail) + "</p></div>"
-  ).join("");
-}
-
-function escapeHTML(s) {
-  return String(s || "").replace(/[&<>"']/g, c => ({
+function escapeHTML(s){
+  return String(s||"").replace(/[&<>"']/g,c=>({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   })[c]);
 }
 
-function submitLevel() {
-  if (!selectedLevel) return alert("กรุณาเลือกระดับน้ำ");
-  const detail = document.getElementById("level-detail").value;
-  saveRecord({
-    title:"รายงานระดับน้ำ: " + selectedLevel,
-    area:document.getElementById("level-location").value || "ไม่ได้ระบุพื้นที่",
-    detail:document.getElementById("trend").value + " " + detail,
-    time:new Date().toLocaleString("th-TH")
-  });
-  alert("บันทึกรายงานไว้ในเบราว์เซอร์นี้แล้ว");
+function renderRecords(){
+  const el=document.getElementById("records-list");
+  const records=getRecords().slice().reverse();
+
+  if(!records.length){
+    el.innerHTML='<div class="card card-body"><span class="muted">ยังไม่มีรายงาน</span></div>';
+    return;
+  }
+
+  el.innerHTML=records.map(r=>`
+    <div class="card card-body">
+      <b>${escapeHTML(r.title)}</b>
+      <p>${escapeHTML(r.area)} · ${escapeHTML(r.time)}</p>
+      <p>${escapeHTML(r.detail)}</p>
+    </div>
+  `).join("");
 }
 
-document.getElementById("report-form").addEventListener("submit", function(e) {
+function submitLevel(){
+  if(!selectedLevel){
+    alert("กรุณาเลือกระดับน้ำ");
+    return;
+  }
+
+  const location=document.getElementById("level-location").value||"ไม่ได้ระบุพื้นที่";
+  const detail=document.getElementById("level-detail").value;
+  const trend=selectedTrend||"ไม่ระบุแนวโน้ม";
+
+  saveRecord({
+    title:"รายงานระดับน้ำ: "+selectedLevel,
+    area:location,
+    detail:trend+" "+detail,
+    time:new Date().toLocaleString("th-TH")
+  });
+
+  alert("บันทึกรายงานไว้ในเบราว์เซอร์นี้แล้ว");
+  document.getElementById("level-detail").value="";
+  document.getElementById("level-location").value="";
+  selectedLevel="";
+  selectedTrend="";
+  document.querySelectorAll(".level-card,.choice").forEach(x=>x.classList.remove("selected"));
+  document.getElementById("selected-level").textContent="ยังไม่ได้เลือกระดับน้ำ";
+}
+
+document.getElementById("report-form").addEventListener("submit",function(e){
   e.preventDefault();
+
   saveRecord({
     title:document.getElementById("incident-type").value,
     area:document.getElementById("incident-district").value,
-    detail:document.getElementById("incident-detail").value +
-      " | ติดต่อ: " + document.getElementById("incident-phone").value +
-      " | สถานที่: " + document.getElementById("incident-location").value,
+    detail:
+      document.getElementById("incident-detail").value+
+      " | ติดต่อ: "+document.getElementById("incident-phone").value+
+      " | สถานที่: "+document.getElementById("incident-location").value,
     time:new Date().toLocaleString("th-TH")
   });
+
   this.reset();
   closeReport();
   alert("บันทึกข้อมูลในเบราว์เซอร์นี้แล้ว");
 });
 
-function initMaps() {
-  if (!window.L) {
-    document.getElementById("map").textContent = "โหลดแผนที่ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต";
+function initMaps(){
+  if(!window.L){
+    document.getElementById("map").textContent="โหลดแผนที่ไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ต";
     return;
   }
-  map = L.map("map").setView([16.44,100.35], 7);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+
+  map=L.map("map").setView([16.44,100.35],9);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
     maxZoom:19,
     attribution:"© OpenStreetMap"
   }).addTo(map);
   L.marker([16.44,100.35]).addTo(map).bindPopup("จังหวัดพิจิตร");
 
-  map.on("click", e => {
-    selectedCoords = [e.latlng.lat,e.latlng.lng];
+  map.on("click",e=>{
+    selectedCoords=[e.latlng.lat,e.latlng.lng];
     document.getElementById("incident-location").value =
-      e.latlng.lat.toFixed(6) + ", " + e.latlng.lng.toFixed(6);
-    alert("เลือกพิกัดบนแผนที่แล้ว");
+      e.latlng.lat.toFixed(6)+", "+e.latlng.lng.toFixed(6);
+    document.getElementById("coordinates").textContent =
+      "พิกัดที่เลือก: "+e.latlng.lat.toFixed(6)+", "+e.latlng.lng.toFixed(6);
   });
 
-  levelMap = L.map("levelmap").setView([16.44,100.35], 8);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  levelMap=L.map("levelmap").setView([16.44,100.35],9);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
     maxZoom:19,
     attribution:"© OpenStreetMap"
   }).addTo(levelMap);
   L.marker([16.44,100.35]).addTo(levelMap).bindPopup("จังหวัดพิจิตร");
 
-  levelMap.on("click", e => {
-    selectedCoords = [e.latlng.lat,e.latlng.lng];
+  levelMap.on("click",e=>{
+    selectedCoords=[e.latlng.lat,e.latlng.lng];
     document.getElementById("level-location").value =
-      e.latlng.lat.toFixed(6) + ", " + e.latlng.lng.toFixed(6);
+      e.latlng.lat.toFixed(6)+", "+e.latlng.lng.toFixed(6);
   });
 }
 
 initMaps();
 renderRecords();
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeReport();
+});
 </script>
 </body>
 </html>
+'''
+
+path = Path("/mnt/data/index_phichit_flood_v2.html")
+path.write_text(html, encoding="utf-8")
+print(f"สร้างไฟล์เรียบร้อย: {path}")
+print(f"ขนาดไฟล์: {path.stat().st_size:,} bytes")

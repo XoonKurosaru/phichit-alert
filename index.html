@@ -880,8 +880,3 @@ document.addEventListener("keydown",e=>{
 </body>
 </html>
 '''
-
-path = Path("/mnt/data/index_phichit_flood_v2.html")
-path.write_text(html, encoding="utf-8")
-print(f"สร้างไฟล์เรียบร้อย: {path}")
-print(f"ขนาดไฟล์: {path.stat().st_size:,} bytes")

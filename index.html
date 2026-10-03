@@ -551,10 +551,11 @@ textarea{min-height:100px;resize:vertical}
   <button class="choice" onclick="chooseTrend(this,'ทรงตัว')" style="padding: 6px 2px; font-size: 13px;">→<br>ทรงตัว</button>
   <button class="choice" onclick="chooseTrend(this,'กำลังลด')" style="padding: 6px 2px; font-size: 13px;">↓<br>กำลังลด</button>
 </div>
-<div class="pass-grid" style="margin-top: 8px;">
-  <button class="choice pass-choice" onclick="chooseTrend(this,'รถเก๋ง / กระบะผ่านได้')">รถเก๋ง/กระบะผ่านได้</button>
-  <button class="choice pass-choice" onclick="chooseTrend(this,'เฉพาะรถสูง')">เฉพาะรถสูง</button>
-  <button class="choice pass-choice" onclick="chooseTrend(this,'เรือเท่านั้น')">เรือเท่านั้น</button>
+      
+<div class="pass-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px;">
+  <button class="choice pass-choice" onclick="chooseTrend(this,'เก๋ง / กระบะผ่านได้')" style="padding: 6px 2px; font-size: 12px; white-space: nowrap;">🚗<br>เก๋ง/กระบะผ่านได้</button>
+  <button class="choice pass-choice" onclick="chooseTrend(this,'เฉพาะรถสูง')" style="padding: 6px 2px; font-size: 12px; white-space: nowrap;">🛻<br>เฉพาะรถสูง</button>
+  <button class="choice pass-choice" onclick="chooseTrend(this,'เรือเท่านั้น')" style="padding: 6px 2px; font-size: 12px; white-space: nowrap;">🚤<br>เรือเท่านั้น</button>
 </div>
 
       <label class="field" style="margin-top:14px">หมายเหตุ</label>

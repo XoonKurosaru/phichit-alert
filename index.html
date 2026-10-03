@@ -522,28 +522,45 @@ textarea{min-height:100px;resize:vertical}
       <button class="outline big" onclick="chooseOnMap()">⌖ เลือกจุดบนแผนที่</button>
       <input id="level-location" placeholder="พิกัดหรือชื่อสถานที่">
 
-      <div class="section-title">2. ระดับน้ำ</div>
-      <div class="level-grid">
-        <button class="level-card" onclick="setLevel(this,'แห้ง / ต่ำกว่าเข่า')">
-          <div class="level-person">🧍</div><div class="level-name">แห้ง / ต่ำกว่าเข่า</div><div class="level-height">&lt; 10 ซม.</div><div class="level-water" style="background:#63cf8c;height:12px"></div>
-        </button>
-        <button class="level-card" onclick="setLevel(this,'เข่า–เอว')">
-          <div class="level-person">🧍</div><div class="level-name">เข่า–เอว</div><div class="level-height">10–50 ซม.</div><div class="level-water" style="background:#e7bd45;height:28px"></div>
-        </button>
-        <button class="level-card" onclick="setLevel(this,'เอว–อก')">
-          <div class="level-person">🧍</div><div class="level-name">เอว–อก</div><div class="level-height">50–100 ซม.</div><div class="level-water" style="background:#ee8445;height:45px"></div>
-        </button>
-        <button class="level-card" onclick="setLevel(this,'อก–คอ')">
-          <div class="level-person">🧍</div><div class="level-name">อก–คอ</div><div class="level-height">100–130 ซม.</div><div class="level-water" style="background:#df4949;height:62px"></div>
-        </button>
-        <button class="level-card" onclick="setLevel(this,'อกขึ้นไป')">
-          <div class="level-person">🧍</div><div class="level-name">อกขึ้นไป</div><div class="level-height">130–180 ซม.</div><div class="level-water" style="background:#bb3e72;height:80px"></div>
-        </button>
-        <button class="level-card" onclick="setLevel(this,'มิดหัว / ท่วมหลังคา')">
-          <div class="level-person">🧍</div><div class="level-name">มิดหัว / ท่วมหลังคา</div><div class="level-height">&gt; 180 ซม.</div><div class="level-water" style="background:#653da7;height:100px"></div>
-        </button>
-      </div>
-      <p id="selected-level" class="selected-text">ยังไม่ได้เลือกระดับน้ำ</p>
+ <div class="section-title">2. ระดับน้ำ</div>
+
+<div class="level-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+  <button class="level-card" onclick="setLevel(this,'แห้ง / ต่ำกว่าข้อเท้า')" style="padding: 8px 4px; text-align: center;">
+    <div style="font-size: 24px;">🚶‍♂️</div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">แห้ง / ต่ำกว่าข้อเท้า</div>
+    <div class="level-height" style="font-size: 11px; color: #666;">&lt; 10 ซม.</div>
+  </button>
+
+  <button class="level-card" onclick="setLevel(this,'ข้อเท้า–เข่า')" style="padding: 8px 4px; text-align: center;">
+    <div style="font-size: 24px;">🦶</div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">ข้อเท้า–เข่า</div>
+    <div class="level-height" style="font-size: 11px; color: #666;">10–50 ซม.</div>
+  </button>
+
+  <button class="level-card" onclick="setLevel(this,'เข่า–เอว')" style="padding: 8px 4px; text-align: center;">
+    <div style="font-size: 24px;">🚶</div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">เข่า–เอว</div>
+    <div class="level-height" style="font-size: 11px; color: #666;">50–100 ซม.</div>
+  </button>
+
+  <button class="level-card" onclick="setLevel(this,'เอว–อก')" style="padding: 8px 4px; text-align: center;">
+    <div style="font-size: 24px;">🏊‍♂️</div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">เอว–อก</div>
+    <div class="level-height" style="font-size: 11px; color: #666;">100–130 ซม.</div>
+  </button>
+
+  <button class="level-card" onclick="setLevel(this,'อกขึ้นไป')" style="padding: 8px 4px; text-align: center;">
+    <div style="font-size: 24px;">🏊</div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">อกขึ้นไป</div>
+    <div class="level-height" style="font-size: 11px; color: #666;">130–180 ซม.</div>
+  </button>
+
+  <button class="level-card" onclick="setLevel(this,'มิดหัว / ท่วมหลังคา')" style="padding: 8px 4px; text-align: center;">
+    <div style="font-size: 24px;">🏠🌊</div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">มิดหัว / ท่วมหลังคา</div>
+    <div class="level-height" style="font-size: 11px; color: #666;">&gt; 180 ซม.</div>
+  </button>
+</div>
 
 <div class="section-title">3. แนวโน้มและรถผ่านได้ไหม</div>
 <div class="trend-grid" style="display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 8px;">

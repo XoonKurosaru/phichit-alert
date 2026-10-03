@@ -522,44 +522,81 @@ textarea{min-height:100px;resize:vertical}
       <button class="outline big" onclick="chooseOnMap()">⌖ เลือกจุดบนแผนที่</button>
       <input id="level-location" placeholder="พิกัดหรือชื่อสถานที่">
 
- <div class="section-title">2. ระดับน้ำ</div>
+<div class="section-title">2. ระดับน้ำ</div>
 
 <div class="level-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
-  <button class="level-card" onclick="setLevel(this,'แห้ง / ต่ำกว่าข้อเท้า')" style="padding: 8px 4px; text-align: center;">
-    <div style="font-size: 24px;">🚶‍♂️</div>
-    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">แห้ง / ต่ำกว่าข้อเท้า</div>
-    <div class="level-height" style="font-size: 11px; color: #666;">&lt; 10 ซม.</div>
+  
+ 
+  <button class="level-card" onclick="setLevel(this,'แห้ง / ต่ำกว่าข้อเท้า')" style="padding: 10px 4px; text-align: center; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer;">
+    <div style="position: relative; width: 60px; height: 60px; margin: 0 auto; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+     
+      <svg width="24" height="52" viewBox="0 0 24 52" style="position: absolute; bottom: 0; z-index: 1;">
+        <circle cx="12" cy="6" r="5" fill="#1e293b"/>
+        <path d="M4 16 C4 14, 20 14, 20 16 L18 34 H14 L14 50 C14 51.5, 13 52, 12 52 C11 52, 10 51.5, 10 50 L10 34 H6 L4 16 Z" fill="#1e293b"/>
+      </svg>
+     
+      <div style="width: 100%; height: 6px; background: #4ade80; z-index: 2; opacity: 0.85;"></div>
+    </div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 6px; color: #0f172a;">แห้ง / ต่ำกว่าข้อเท้า</div>
+    <div class="level-height" style="font-size: 11px; color: #64748b; margin-top: 2px;">&lt; 10 ซม.</div>
   </button>
 
-  <button class="level-card" onclick="setLevel(this,'ข้อเท้า–เข่า')" style="padding: 8px 4px; text-align: center;">
-    <div style="font-size: 24px;">🦶</div>
-    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">ข้อเท้า–เข่า</div>
-    <div class="level-height" style="font-size: 11px; color: #666;">10–50 ซม.</div>
+  <button class="level-card" onclick="setLevel(this,'ข้อเท้า–เข่า')" style="padding: 10px 4px; text-align: center; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer;">
+    <div style="position: relative; width: 60px; height: 60px; margin: 0 auto; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+      <svg width="24" height="52" viewBox="0 0 24 52" style="position: absolute; bottom: 0; z-index: 1;">
+        <circle cx="12" cy="6" r="5" fill="#1e293b"/>
+        <path d="M4 16 C4 14, 20 14, 20 16 L18 34 H14 L14 50 C14 51.5, 13 52, 12 52 C11 52, 10 51.5, 10 50 L10 34 H6 L4 16 Z" fill="#1e293b"/>
+      </svg>
+      <div style="width: 100%; height: 16px; background: #facc15; z-index: 2; opacity: 0.85;"></div>
+    </div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 6px; color: #0f172a;">ข้อเท้า–เข่า</div>
+    <div class="level-height" style="font-size: 11px; color: #64748b; margin-top: 2px;">10–50 ซม.</div>
+  </button>
+  <button class="level-card" onclick="setLevel(this,'เข่า–เอว')" style="padding: 10px 4px; text-align: center; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer;">
+    <div style="position: relative; width: 60px; height: 60px; margin: 0 auto; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+      <svg width="24" height="52" viewBox="0 0 24 52" style="position: absolute; bottom: 0; z-index: 1;">
+        <circle cx="12" cy="6" r="5" fill="#1e293b"/>
+        <path d="M4 16 C4 14, 20 14, 20 16 L18 34 H14 L14 50 C14 51.5, 13 52, 12 52 C11 52, 10 51.5, 10 50 L10 34 H6 L4 16 Z" fill="#1e293b"/>
+      </svg>
+      <div style="width: 100%; height: 26px; background: #f97316; z-index: 2; opacity: 0.85;"></div>
+    </div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 6px; color: #0f172a;">เข่า–เอว</div>
+    <div class="level-height" style="font-size: 11px; color: #64748b; margin-top: 2px;">50–100 ซม.</div>
+  </button>
+  <button class="level-card" onclick="setLevel(this,'เอว–อก')" style="padding: 10px 4px; text-align: center; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer;">
+    <div style="position: relative; width: 60px; height: 60px; margin: 0 auto; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+      <svg width="24" height="52" viewBox="0 0 24 52" style="position: absolute; bottom: 0; z-index: 1;">
+        <circle cx="12" cy="6" r="5" fill="#1e293b"/>
+        <path d="M4 16 C4 14, 20 14, 20 16 L18 34 H14 L14 50 C14 51.5, 13 52, 12 52 C11 52, 10 51.5, 10 50 L10 34 H6 L4 16 Z" fill="#1e293b"/>
+      </svg>
+      <div style="width: 100%; height: 36px; background: #ef4444; z-index: 2; opacity: 0.85;"></div>
+    </div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 6px; color: #0f172a;">เอว–อก</div>
+    <div class="level-height" style="font-size: 11px; color: #64748b; margin-top: 2px;">100–130 ซม.</div>
+  </button>
+  <button class="level-card" onclick="setLevel(this,'อกขึ้นไป')" style="padding: 10px 4px; text-align: center; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer;">
+    <div style="position: relative; width: 60px; height: 60px; margin: 0 auto; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+      <svg width="24" height="52" viewBox="0 0 24 52" style="position: absolute; bottom: 0; z-index: 1;">
+        <circle cx="12" cy="6" r="5" fill="#1e293b"/>
+        <path d="M4 16 C4 14, 20 14, 20 16 L18 34 H14 L14 50 C14 51.5, 13 52, 12 52 C11 52, 10 51.5, 10 50 L10 34 H6 L4 16 Z" fill="#1e293b"/>
+      </svg>
+      <div style="width: 100%; height: 44px; background: #be123c; z-index: 2; opacity: 0.85;"></div>
+    </div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 6px; color: #0f172a;">อกขึ้นไป</div>
+    <div class="level-height" style="font-size: 11px; color: #64748b; margin-top: 2px;">130–180 ซม.</div>
+  </button>
+  <button class="level-card" onclick="setLevel(this,'มิดหัว / ท่วมหลังคา')" style="padding: 10px 4px; text-align: center; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; cursor: pointer;">
+    <div style="position: relative; width: 60px; height: 60px; margin: 0 auto; overflow: hidden; display: flex; align-items: flex-end; justify-content: center;">
+      <svg width="24" height="52" viewBox="0 0 24 52" style="position: absolute; bottom: 0; z-index: 1;">
+        <circle cx="12" cy="6" r="5" fill="#1e293b" opacity="0.5"/>
+        <path d="M4 16 C4 14, 20 14, 20 16 L18 34 H14 L14 50 C14 51.5, 13 52, 12 52 C11 52, 10 51.5, 10 50 L10 34 H6 L4 16 Z" fill="#1e293b" opacity="0.5"/>
+      </svg>
+      <div style="width: 100%; height: 60px; background: #6b21a8; z-index: 2; opacity: 0.85;"></div>
+    </div>
+    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 6px; color: #0f172a;">มิดหัว / ท่วมหลังคา</div>
+    <div class="level-height" style="font-size: 11px; color: #64748b; margin-top: 2px;">&gt; 180 ซม.</div>
   </button>
 
-  <button class="level-card" onclick="setLevel(this,'เข่า–เอว')" style="padding: 8px 4px; text-align: center;">
-    <div style="font-size: 24px;">🚶</div>
-    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">เข่า–เอว</div>
-    <div class="level-height" style="font-size: 11px; color: #666;">50–100 ซม.</div>
-  </button>
-
-  <button class="level-card" onclick="setLevel(this,'เอว–อก')" style="padding: 8px 4px; text-align: center;">
-    <div style="font-size: 24px;">🏊‍♂️</div>
-    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">เอว–อก</div>
-    <div class="level-height" style="font-size: 11px; color: #666;">100–130 ซม.</div>
-  </button>
-
-  <button class="level-card" onclick="setLevel(this,'อกขึ้นไป')" style="padding: 8px 4px; text-align: center;">
-    <div style="font-size: 24px;">🏊</div>
-    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">อกขึ้นไป</div>
-    <div class="level-height" style="font-size: 11px; color: #666;">130–180 ซม.</div>
-  </button>
-
-  <button class="level-card" onclick="setLevel(this,'มิดหัว / ท่วมหลังคา')" style="padding: 8px 4px; text-align: center;">
-    <div style="font-size: 24px;">🏠🌊</div>
-    <div class="level-name" style="font-weight: bold; font-size: 12px; margin-top: 4px;">มิดหัว / ท่วมหลังคา</div>
-    <div class="level-height" style="font-size: 11px; color: #666;">&gt; 180 ซม.</div>
-  </button>
 </div>
 
 <div class="section-title">3. แนวโน้มและรถผ่านได้ไหม</div>

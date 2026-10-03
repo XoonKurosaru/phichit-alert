@@ -536,17 +536,19 @@ textarea{min-height:100px;resize:vertical}
       </div>
       <p id="selected-level" class="selected-text">ยังไม่ได้เลือกระดับน้ำ</p>
 
-      <div class="section-title">3. แนวโน้มและรถผ่านได้ไหม</div>
-      <div class="trend-grid">
-        <button class="choice" onclick="chooseTrend(this,'น้ำกำลังขึ้น')">↑<br>น้ำกำลังขึ้น</button>
-        <button class="choice" onclick="chooseTrend(this,'ทรงตัว')">→<br>ทรงตัว</button>
-        <button class="choice" onclick="chooseTrend(this,'กำลังลดลง')">↓<br>กำลังลดลง</button>
-      </div>
-      <div class="pass-grid" style="margin-top:8px">
-        <button class="choice" onclick="chooseTrend(this,'รถเก๋ง / กระบะผ่านได้')">🚗<br>รถเก๋ง / กระบะผ่านได้</button>
-        <button class="choice" onclick="chooseTrend(this,'เฉพาะรถสูง')">🛻<br>เฉพาะรถสูง</button>
-        <button class="choice" onclick="chooseTrend(this,'เรือเท่านั้น')">🚤<br>เรือเท่านั้น</button>
-      </div>
+<div class="section-title">3. แนวโน้มและรถผ่านได้ไหม</div>
+
+<div class="trend-grid">
+  <button class="choice" onclick="chooseTrend(this,'น้ำกำลังขึ้น')">↑ น้ำกำลังขึ้น</button>
+  <button class="choice" onclick="chooseTrend(this,'ทรงตัว')">→ ทรงตัว</button>
+  <button class="choice" onclick="chooseTrend(this,'กำลังลดลง')">↓ กำลังลดลง</button>
+</div>
+
+<div class="pass-grid" style="margin-top: 10px;">
+  <button class="choice" onclick="chooseTrend(this,'รถเก๋ง / กระบะผ่านได้')">🚗 รถเก๋ง / กระบะผ่านได้</button>
+  <button class="choice" onclick="chooseTrend(this,'เฉพาะรถสูง')">🛻 เฉพาะรถสูง</button>
+  <button class="choice" onclick="chooseTrend(this,'เรือเท่านั้น')">🚤 เรือเท่านั้น</button>
+</div>
 
       <label class="field" style="margin-top:14px">หมายเหตุ</label>
       <textarea id="level-detail" placeholder="เช่น น้ำเข้าบ้านประมาณ 20 ซม. รถเล็กผ่านไม่ได้"></textarea>
